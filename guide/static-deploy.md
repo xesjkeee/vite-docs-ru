@@ -1,10 +1,10 @@
-# Deploying a Static Site
+# Публикация статического сайта
 
-The following guides are based on some shared assumptions:
+Следующие руководства основаны на некоторых предположениях:
 
-- You are using the default build output location (`dist`). This location [can be changed using `build.outDir`](https://vitejs.dev/config/#build-outdir), and you can extrapolate instructions from these guides in that case.
-- You are using npm. You can use equivalent commands to run the scripts if you are using Yarn or other package managers.
-- Vite is installed as a local dev dependency in your project, and you have setup the following npm scripts:
+- Вы используете расположение вывода сборки по умолчанию (`dist`). Это местоположение [можно изменить с помощью `build.outDir`](https://vitejs.dev/config/#build-outdir), в этом случае вы можете экстраполировать инструкции из этих руководств.
+- Вы используете npm. Вы можете использовать эквивалентные команды для запуска скриптов, если вы используете Yarn или другие пакетные менеджеры.
+- Vite устанавливлен как локальная dev-зависимость в вашем проекте, и у вас настроены следующие npm скрипты:
 
 ```json
 {
@@ -15,34 +15,34 @@ The following guides are based on some shared assumptions:
 }
 ```
 
-It is important to note that `vite preview` is intended for previewing the build locally and not meant as a production server.
+Важно отметить, что `vite preview` предназначен для предварительного локального просмотра сборки и не должен использоваться в качестве production сервера.
 
-::: tip NOTE
-These guides provide instructions for performing a static deployment of your Vite site. Vite also has experimental support for Server Side Rendering. SSR refers to front-end frameworks that support running the same application in Node.js, pre-rendering it to HTML, and finally hydrating it on the client. Check out the [SSR Guide](./ssr) to learn about this feature. On the other hand, if you are looking for integration with traditional server-side frameworks, check out the [Backend Integration guide](./backend-integration) instead.
+::: tip ПРИМЕЧАНИЕ
+Эти руководства содержат инструкции по статическому развертыванию вашего Vite сайта. Vite также имеет экспериментальную поддержку рендеринга на стороне сервера. SSR относится к front-end фреймворкам, которые поддерживают запуск того же приложения в Node.js, его предварительный рендеринг в HTML и, наконец, гидратацию на клиенте. Прочтите [Руководство по SSR](./ssr), чтобы подробнее узнать об этой функции. С другой стороны, если вы ищете интеграцию с традиционными серверными фреймворками, ознакомьтесь с [Backend Integration guide](./backend-integration).
 :::
 
-## Building The App
+## Сборка приложения
 
-You may run `npm run build` command to build the app.
+Вы можете запустить команду `npm run build`, чтобы собрать приложение.
 
 ```bash
 $ npm run build
 ```
 
-By default, the build output will be placed at `dist`. You may deploy this `dist` folder to any of your preferred platforms.
+По умолчанию вывод сборки будет помещен в `dist`. Вы можете опубликовать эту `dist` папку на любой вашей предпочтительной платформе.
 
-### Testing The App Locally
+### Локальное тестирование приложения
 
-Once you've built the app, you may test it locally by running `npm run preview` command.
+Собрав приложение, вы можете протестировать его локально, выполнив команду `npm run preview`.
 
 ```bash
 $ npm run build
 $ npm run preview
 ```
 
-The `preview` command will boot up local static web server that serves the files from `dist` at http://localhost:5000. It's an easy way to check if the production build looks OK in your local environment.
+Команда `preview` загрузит локальный статический веб-сервер, который будет отдавать файлы из `dist` на http://localhost:5000. Это простой способ проверить, нормально ли выглядит production сборка в вашей локальной среде.
 
-You may configure the port of the server py passing `--port` flag as an argument.
+Вы можете настроить порт сервера, передав флаг `--port` в качестве аргумента.
 
 ```json
 {
@@ -52,63 +52,63 @@ You may configure the port of the server py passing `--port` flag as an argument
 }
 ```
 
-Now the `preview` method will launch the server at http://localhost:8080.
+Теперь `preview` команда запустит сервер на http://localhost:8080.
 
 ## GitHub Pages
 
-1. Set the correct `base` in `vite.config.js`.
+1. Установите правильный `base` в `vite.config.js`.
 
-   If you are deploying to `https://<USERNAME>.github.io/`, you can omit `base` as it defaults to `'/'`.
+   Если вы публикуете на `https://<USERNAME>.github.io/`, вы можете не указывать `base`, так как по умолчанию он равен `'/'`.
 
-   If you are deploying to `https://<USERNAME>.github.io/<REPO>/`, for example your repository is at `https://github.com/<USERNAME>/<REPO>`, then set `base` to `'/<REPO>/'`.
+   Если вы публикуете на `https://<USERNAME>.github.io/<REPO>/`, и, например, ваш репозиторий находится на `https://github.com/<USERNAME>/<REPO>`, то установите `base` равный `'/<REPO>/'`.
 
-2. Inside your project, create `deploy.sh` with the following content (with highlighted lines uncommented appropriately), and run it to deploy:
+2. Внутри вашего проекта создайте `deploy.sh` со следующим содержимым (с выделенными строками без комментариев) и запустите его для публикации:
 
    ```bash{13,20,23}
    #!/usr/bin/env sh
 
-   # abort on errors
+   # прерывание при ошибках
    set -e
 
-   # build
+   # сборка
    npm run build
 
-   # navigate into the build output directory
+   # переход к каталогу со сборкой
    cd dist
 
-   # if you are deploying to a custom domain
+   # если вы публикуете на личный домен
    # echo 'www.example.com' > CNAME
 
    git init
    git add -A
    git commit -m 'deploy'
 
-   # if you are deploying to https://<USERNAME>.github.io
+   # если вы публикуете на https://<USERNAME>.github.io
    # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
-   # if you are deploying to https://<USERNAME>.github.io/<REPO>
+   # если вы публикуете на https://<USERNAME>.github.io/<REPO>
    # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
 
    cd -
    ```
 
 ::: tip
-You can also run the above script in your CI setup to enable automatic deployment on each push.
+Вы также можете запустить приведенный выше скрипт в настройках CI, чтобы включить автоматическую публикацию при каждом пуше.
 :::
 
-### GitHub Pages and Travis CI
+### GitHub Pages и Travis CI
 
-1. Set the correct `base` in `vite.config.js`.
+1. Установите правильный `base` в `vite.config.js`.
 
-   If you are deploying to `https://<USERNAME or GROUP>.github.io/`, you can omit `base` as it defaults to `'/'`.
+   Если вы публикуете на `https://<USERNAME or GROUP>.github.io/`, вы можете не указывать `base`, так как по умолчанию он равен `'/'`.
 
-   If you are deploying to `https://<USERNAME or GROUP>.github.io/<REPO>/`, for example your repository is at `https://github.com/<USERNAME>/<REPO>`, then set `base` to `'/<REPO>/'`.
+   Если вы публикуете на `https://<USERNAME or GROUP>.github.io/<REPO>/`, и, например, ваш репозиторий находится на `https://github.com/<USERNAME>/<REPO>`, то установите `base` равный `'/<REPO>/'`.
 
-2. Create a file named `.travis.yml` in the root of your project.
+2. Создайте файл с именем `.travis.yml` в корне вашего проекта.
 
-3. Run `npm install` locally and commit the generated lockfile (`package-lock.json`).
+3. Запустите `npm install` локально и закоммитьте сгенерированный lockfile (`package-lock.json`).
 
-4. Use the GitHub Pages deploy provider template, and follow the [Travis CI documentation](https://docs.travis-ci.com/user/deployment/pages/).
+4. Используйте шаблон развертывания GitHub Pages и следуйте [документации Travis CI](https://docs.travis-ci.com/user/deployment/pages/).
 
    ```yaml
    language: node_js
@@ -122,17 +122,17 @@ You can also run the above script in your CI setup to enable automatic deploymen
      provider: pages
      skip_cleanup: true
      local_dir: dist
-     # A token generated on GitHub allowing Travis to push code on you repository.
-     # Set in the Travis settings page of your repository, as a secure variable.
+     # Токен, сгенерированный на GitHub, позволяющий Travis пушить код в ваш репозиторий.
+     # Установите на странице настроек Travis вашего репозитория как secure переменную.
      github_token: $GITHUB_TOKEN
      keep_history: true
      on:
        branch: master
    ```
 
-## GitLab Pages and GitLab CI
+## GitLab Pages и GitLab CI
 
-1. Set the correct `base` in `vite.config.js`.
+1. Установите правильный `base` в `vite.config.js`.
 
    If you are deploying to `https://<USERNAME or GROUP>.gitlab.io/`, you can omit `base` as it defaults to `'/'`.
 

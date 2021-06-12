@@ -413,7 +413,7 @@ function myPlugin() {
 }
 ```
 
-## Rollup Plugin Compatibility
+## Совместимость Rollup плагинов
 
 A fair number of Rollup plugins will work directly as a Vite plugin (e.g. `@rollup/plugin-alias` or `@rollup/plugin-json`), but not all of them, since some plugin hooks do not make sense in an unbundled dev server context.
 

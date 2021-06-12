@@ -299,7 +299,7 @@ export default async ({ command, mode }) => {
 ### assetsInclude
 
 - **Type:** `string | RegExp | (string | RegExp)[]`
-- **Related:** [Static Asset Handling](/guide/assets)
+- **Related:** [Обработка статических ресурсов](/guide/assets)
 
   Specify additional file types to be treated as static assets so that:
 

@@ -1,54 +1,56 @@
-# Static Asset Handling
+# Обработка статических ресурсов
 
 - Related: [Public Base Path](./build#public-base-path)
 - Related: [`assetsInclude` config option](/config/#assetsinclude)
 
-## Importing Asset as URL
+## Импорт ресурса как URL
 
-Importing a static asset will return the resolved public URL when it is served:
+Импорт статического ресурса вернет зарезолвленный публичный URL-адрес до места его хранения:
 
 ```js
 import imgUrl from './img.png'
 document.getElementById('hero-img').src = imgUrl
 ```
 
-For example, `imgUrl` will be `/img.png` during development, and become `/assets/img.2d8efhg.png` in the production build.
+Например, `imgUrl` будет `/img.png` во время разработки и станет `/assets/img.2d8efhg.png` в production сборке.
 
-The behavior is similar to webpack's `file-loader`. The difference is that the import can be either using absolute public paths (based on project root during dev) or relative paths.
+Поведение аналогично `file-loader` плагину webpack. Разница в том, что импорт может осуществляться с использованием абсолютных публичных путей (на основе корня проекта во время разработки), либо с использованием относительных путей.
 
-- `url()` references in CSS are handled the same way.
+- `url()` в CSS обрабатываются таким же образом.
 
-- If using the Vue plugin, asset references in Vue SFC templates are automatically converted into imports.
+- При использовании Vue плагина ссылки на ресурсы в Vue SFC шаблонах автоматически преобразуются в импорт.
 
-- Common image, media, and font filetypes are detected as assets automatically. You can extend the internal list using the [`assetsInclude` option](/config/#assetsinclude).
+- Стандартные типы файлов изображений, мультимедиа и шрифтов автоматически определяются как ресурсы. Вы можете расширить внутренний список, используя [параметр `assetsInclude`](/config/#assetsinclude).
 
-- Referenced assets are included as part of the build assets graph, will get hashed file names, and can be processed by plugins for optimization.
+- Ресурсы, на которые есть ссылки, включаются как часть графа ресурсов сборки, получают хешированные имена файлов и могут обрабатываться плагинами для оптимизации.
 
-- Assets smaller in bytes than the [`assetsInlineLimit` option](/config/#build-assetsinlinelimit) will be inlined as base64 data URLs.
+- Ресурсы, размер которых меньше, чем [параметр `assetsInlineLimit`](/config/#build-assetsinlinelimit) (в байтах), будут встроены в виде base64 адресов.
 
-### Explicit URL Imports
+### Явный импорт URL
 
-Assets that are not included in the internal list or in `assetsInclude`, can be explicitly imported as an URL using the `?url` suffix. This is useful, for example, to import [Houdini Paint Worklets](https://houdini.how/usage).
+Ресурсы, которые не включены во внутренний список или в `assetsInclude`, могут быть явно импортированы как URL-адрес с `?url` суффиксом. Это полезно, например, для импорта [Houdini Paint Worklets](https://houdini.how/usage).
 
 ```js
 import workletURL from 'extra-scalloped-border/worklet.js?url'
 CSS.paintWorklet.addModule(workletURL)
 ```
 
-### Importing Asset as String
+### Импорт ресурса как строки
 
-Assets can be imported as strings using the `?raw` suffix.
+Ресурсы могут быть импортированы в виде строк с использованием `?raw` суффикса.
 
 ```js
 import shaderString from './shader.glsl?raw'
 ```
 
-### Importing Script as a Worker
+### Импорт скрипта в качестве воркера
 
 Scripts can be imported as web workers with the `?worker` or `?sharedworker` suffix.
 
+Скрипты могут быть импортированы как веб-воркеры с `?worker` или `?sharedworker` суффиксом.
+
 ```js
-// Separate chunk in the production build
+// Отдельный чанк в production сборке
 import Worker from './shader.js?worker'
 const worker = new Worker()
 ```
@@ -60,25 +62,25 @@ const sharedWorker = new SharedWorker()
 ```
 
 ```js
-// Inlined as base64 strings
+// Встраивается как base64 строка
 import InlineWorker from './shader.js?worker&inline'
 ```
 
-Check out the [Web Worker section](./features.md#web-workers) for more details.
+Посмотрите [раздел Web Worker](./features.md#web-workers) для получения более подробной информации.
 
-## The `public` Directory
+## `public` директория
 
-If you have assets that are:
+Если у вас есть ресурсы, которые:
 
-- Never referenced in source code (e.g. `robots.txt`)
-- Must retain the exact same file name (without hashing)
-- ...or you simply don't want to have to import an asset first just to get its URL
+- Никогда не упоминается в исходном коде (например, `robots.txt`)
+- Должны сохранить одно и то же имя файла (без хеширования)
+- ...или вы просто не хотите сначала импортировать ресурс, чтобы получить его URL
 
-Then you can place the asset in a special `public` directory under your project root. Assets in this directory will be served at root path `/` during dev, and copied to the root of the dist directory as-is.
+Вы можете поместить ресурс в специальный каталог `public` в корне вашего проекта. Ресурсы в этом каталоге будут обслуживаться по корневому пути `/` во время разработки и копироваться в корень каталога dist как есть.
 
-The directory defaults to `<root>/public`, but can be configured via the [`publicDir` option](/config/#publicdir).
+По умолчанию используется каталог `<root>/public`, но его можно настроить с помощью [`publicDir` параметра](/config/#publicdir).
 
-Note that:
+Обратите внимание, что:
 
-- You should always reference `public` assets using root absolute path - for example, `public/icon.png` should be referenced in source code as `/icon.png`.
-- Assets in `public` cannot be imported from JavaScript.
+- Вы всегда должны ссылаться на `public` ресурсы, используя абсолютный root путь - например, на `public/icon.png` следует ссылаться в исходном коде как `/icon.png`.
+- Ресурсы в `public` не могут быть импортированы из JavaScript.

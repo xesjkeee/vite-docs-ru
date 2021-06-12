@@ -148,7 +148,7 @@ The `dev` script in `package.json` should also be changed to use the server scri
   }
 ```
 
-## Building for Production
+## Сборка для production
 
 To ship an SSR project for production, we need to:
 

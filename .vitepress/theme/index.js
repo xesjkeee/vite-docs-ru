@@ -17,7 +17,7 @@ export default {
               target: '_blank',
               rel: 'noopener'
             },
-            [h('span', 'Sponsors')]
+            [h('span', 'Спонсоры')]
           ),
           ...sponsors.map(({ href, src, name, id }) =>
             h(

@@ -101,19 +101,19 @@ module.exports = {
               link: '/guide/using-plugins'
             },
             {
-              text: 'Dependency Pre-Bundling',
+              text: 'Предварительная сборка зависимостей',
               link: '/guide/dep-pre-bundling'
             },
             {
-              text: 'Static Asset Handling',
+              text: 'Обработка статических ресурсов',
               link: '/guide/assets'
             },
             {
-              text: 'Building for Production',
+              text: 'Сборка для production',
               link: '/guide/build'
             },
             {
-              text: 'Deploying a Static Site',
+              text: 'Публикация статического сайта',
               link: '/guide/static-deploy'
             },
             {
@@ -154,7 +154,7 @@ module.exports = {
               link: '/guide/api-javascript'
             },
             {
-              text: 'Config Reference',
+              text: 'Конфигурация',
               link: '/config/'
             }
           ]
