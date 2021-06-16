@@ -1,66 +1,66 @@
 # Server-Side Rendering
 
-:::warning Experimental
-SSR support is still experimental and you may encounter bugs and unsupported use cases. Proceed at your own risk.
+:::warning Экспериментально
+Поддержка SSR все еще экспериментальная, и вы можете столкнуться с ошибками и неподдерживаемыми вариантами использования. Действуйте на свой страх и риск.
 :::
 
-:::tip Note
-SSR specifically refers to front-end frameworks (for example React, Preact, Vue, and Svelte) that support running the same application in Node.js, pre-rendering it to HTML, and finally hydrating it on the client. If you are looking for integration with traditional server-side frameworks, check out the [Backend Integration guide](./backend-integration) instead.
+:::tip Примечание
+SSR, в частности, относится к front-end фреймворкам (например, React, Preact, Vue и Svelte), которые поддерживают запуск одного и того же приложения в Node.js, пререндеринг его в HTML и, наконец, гидратацию на клиенте. Если вы ищете интеграцию с традиционными серверными фреймворками, ознакомьтесь с [Руководством по Backend Integration](./backend-integration).
 
-The following guide also assumes prior experience working with SSR in your framework of choice, and will only focus on Vite-specific integration details.
+Следующее руководство также предполагает предыдущий опыт работы с SSR в выбранном вами фреймворке и будет сосредоточено только на деталях интеграции, специфичных для Vite.
 :::
 
-:::warning Low-level API
-This is a low-level API meant for library and framework authors. If your goal is to create an application, make sure to check out the higher-level SSR plugins and tools at [Awesome Vite SSR section](https://github.com/vitejs/awesome-vite#ssr) first. That said, many applications are successfully built directly on top of Vite's native low-level API.
+:::warning Низкоуровневый API
+Это низкоуровневый API, предназначенный для авторов библиотек и фреймворков. Если ваша цель - создать приложение, обязательно сначала ознакомьтесь с высокоуровневыми SSR плагинами и инструментами в [разделе Awesome Vite SSR](https://github.com/vitejs/awesome-vite#ssr). Тем не менее, многие приложения успешно создаются непосредственно поверх нативного низкоуровневого API Vite.
 :::
 
-:::tip Help
-If you have questions, the community is usually helpful at [Vite Discord's #ssr channel](https://discord.gg/PkbxgzPhJv).
+:::tip Помощь
+Если у вас есть вопросы, сообщество обычно готово помочь в [Vite Discord #ssr канале](https://discord.gg/PkbxgzPhJv).
 :::
 
-## Example Projects
+## Примеры проектов
 
-Vite provides built-in support for server-side rendering (SSR). The Vite playground contains example SSR setups for Vue 3 and React, which can be used as references for this guide:
+Vite предоставляет встроенную поддержку рендеринга на стороне сервера (SSR). Игровая площадка Vite содержит примеры настроек SSR для Vue 3 и React, которые можно использовать в качестве ссылок для этого руководства:
 
 - [Vue 3](https://github.com/vitejs/vite/tree/main/packages/playground/ssr-vue)
 - [React](https://github.com/vitejs/vite/tree/main/packages/playground/ssr-react)
 
-## Source Structure
+## Исходная структура
 
-A typical SSR application will have the following source file structure:
+Типичное SSR приложение будет иметь следующую структуру исходных файлов:
 
 ```
 - index.html
 - src/
-  - main.js          # exports env-agnostic (universal) app code
-  - entry-client.js  # mounts the app to a DOM element
-  - entry-server.js  # renders the app using the framework's SSR API
+  - main.js          # экспортирует env-agnostic (универсальный) код приложения
+  - entry-client.js  # монтирует приложение к DOM элементу
+  - entry-server.js  # рендерит приложение с помощью SSR API фреймворка
 ```
 
-The `index.html` will need to reference `entry-client.js` and include a placeholder where the server-rendered markup should be injected:
+`index.html` должен будет ссылаться на `entry-client.js` и включать placeholder, куда должна быть вставлена разметка, отрисованная сервером:
 
 ```html
 <div id="app"><!--ssr-outlet--></div>
 <script type="module" src="/src/entry-client.js"></script>
 ```
 
-You can use any placeholder you prefer instead of `<!--ssr-outlet-->`, as long as it can be precisely replaced.
+Вы можете использовать любой placeholder вместо `<!--ssr-outlet-->`, до тех пор, пока его можно точно заменить.
 
-## Conditional Logic
+## Условная логика
 
-If you need to perform conditional logic based on SSR vs. client, you can use
+Если вам нужно выполнить условную логику на основе SSR и клиента, вы можете использовать
 
 ```js
 if (import.meta.env.SSR) {
-  // ... server only logic
+  // ... только серверная логика
 }
 ```
 
-This is statically replaced during build so it will allow tree-shaking of unused branches.
+Это статически заменяется во время сборки, поэтому это позволит tree-shaking неиспользуемые ветви.
 
-## Setting Up the Dev Server
+## Настройка сервера разработки
 
-When building an SSR app, you likely want to have full control over your main server and decouple Vite from the production environment. It is therefore recommended to use Vite in middleware mode. Here is an example with [express](https://expressjs.com/):
+При создании SSR приложения вы, вероятно, захотите иметь полный контроль над своим основным сервером и отделить его от production среды. Поэтому рекомендуется использовать Vite в режиме middleware. Вот пример с [express](http://expressjs.com/):
 
 **server.js**
 

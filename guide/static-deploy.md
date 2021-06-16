@@ -134,13 +134,13 @@ $ npm run preview
 
 1. Установите правильный `base` в `vite.config.js`.
 
-   If you are deploying to `https://<USERNAME or GROUP>.gitlab.io/`, you can omit `base` as it defaults to `'/'`.
+   Если вы публикуете на `https://<USERNAME or GROUP>.gitlab.io/`, вы можете не указывать `base`, так как по умолчанию он равен `'/'`.
 
-   If you are deploying to `https://<USERNAME or GROUP>.gitlab.io/<REPO>/`, for example your repository is at `https://gitlab.com/<USERNAME>/<REPO>`, then set `base` to `'/<REPO>/'`.
+   Если вы публикуете на `https://<USERNAME or GROUP>.gitlab.io/<REPO>/`, и, например, ваш репозиторий находится на `https://gitlab.com/<USERNAME>/<REPO>`, то установите `base` равный `'/<REPO>/'`.
 
-2. Set `build.outDir` in `vite.config.js` to `public`.
+2. Установите `public` в `build.outDir` вашего `vite.config.js`.
 
-3. Create a file called `.gitlab-ci.yml` in the root of your project with the content below. This will build and deploy your site whenever you make changes to your content:
+3. Создайте файл с именем `.gitlab-ci.yml` в корне вашего проекта с содержимым, указанным ниже. Это будет собирать и публиковать ваш сайт каждый раз, когда вы вносите изменения в свой контент:
 
    ```yaml
    image: node:10.22.0
@@ -160,18 +160,18 @@ $ npm run preview
 
 ## Netlify
 
-1. On [Netlify](https://netlify.com), setup up a new project from GitHub with the following settings:
+1. На [Netlify](https://netlify.com) настройте новый проект из GitHub со следующими настройками:
 
-   - **Build Command:** `vite build` or `npm run build`
-   - **Publish directory:** `dist`
+   - **Команда сборки:** `vite build` или `npm run build`.
+   - **Каталог публикации:** `dist`
 
-2. Hit the deploy button.
+2. Нажмите кнопку публикации.
 
 ## Google Firebase
 
-1. Make sure you have [firebase-tools](https://www.npmjs.com/package/firebase-tools) installed.
+1. Убедитесь, что у вас установлен [firebase-tools](https://www.npmjs.com/package/firebase-tools).
 
-2. Create `firebase.json` and `.firebaserc` at the root of your project with the following content:
+2. Создайте `firebase.json` и `.firebaserc` в корне вашего проекта со следующим содержимым:
 
    `firebase.json`:
 
@@ -194,31 +194,31 @@ $ npm run preview
    }
    ```
 
-3. After running `npm run build`, deploy using the command `firebase deploy`.
+3. После запуска `npm run build` выполните публикацию с помощью команды `firebase deploy`.
 
 ## Surge
 
-1. First install [surge](https://www.npmjs.com/package/surge), if you haven’t already.
+1. Сначала установите [surge](https://www.npmjs.com/package/surge), если вы еще этого не сделали.
 
-2. Run `npm run build`.
+2. Запустите `npm run build`.
 
-3. Deploy to surge by typing `surge dist`.
+3. Выполните публикацию на surge, набрав `surge dist`.
 
-You can also deploy to a [custom domain](http://surge.sh/help/adding-a-custom-domain) by adding `surge dist yourdomain.com`.
+Вы также можете выполнить публикацию на [свой домен](http://surge.sh/help/adding-a-custom-domain), добавив `surge dist yourdomain.com`.
 
 ## Heroku
 
-1. Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+1. Установите [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
-2. Create a Heroku account by [signing up](https://signup.heroku.com).
+2. Создайте учетную запись Heroku, [зарегистрировавшись](https://signup.heroku.com).
 
-3. Run `heroku login` and fill in your Heroku credentials:
+3. Запустите `heroku login` и введите свои учетные данные Heroku:
 
    ```bash
    $ heroku login
    ```
 
-4. Create a file called `static.json` in the root of your project with the below content:
+4. Создайте файл с именем `static.json` в корне вашего проекта со следующим содержимым:
 
    `static.json`:
 
@@ -228,55 +228,55 @@ You can also deploy to a [custom domain](http://surge.sh/help/adding-a-custom-do
    }
    ```
 
-   This is the configuration of your site; read more at [heroku-buildpack-static](https://github.com/heroku/heroku-buildpack-static).
+   Это конфигурация вашего сайта; подробнее читайте на [heroku-buildpack-static](https://github.com/heroku/heroku-buildpack-static).
 
-5. Set up your Heroku git remote:
+5. Настройте Heroku git remote:
 
    ```bash
-   # version change
+   # изменение версии
    $ git init
    $ git add .
    $ git commit -m "My site ready for deployment."
 
-   # creates a new app with a specified name
+   # создание нового приложения с указанным именем
    $ heroku apps:create example
 
-   # set buildpack for static sites
+   # указание buildpack для статических сайтов
    $ heroku buildpacks:set https://github.com/heroku/heroku-buildpack-static.git
    ```
 
-6. Deploy your site:
+6. Публикация вашего сайта:
 
    ```bash
-   # publish site
+   # опубликовать сайт
    $ git push heroku master
 
-   # opens a browser to view the Dashboard version of Heroku CI
+   # открыть браузер для просмотра Dashboard версии Heroku CI
    $ heroku open
    ```
 
 ## Vercel
 
-To deploy your Vite app with a [Vercel for Git](https://vercel.com/docs/git), make sure it has been pushed to a Git repository.
+Чтобы опубликовать приложение Vite с помощью [Vercel for Git](https://vercel.com/docs/git), убедитесь, что вы запушили его в Git репозиторий.
 
-Go to https://vercel.com/import/git and import the project into Vercel using your Git of choice (GitHub, GitLab or BitBucket). Follow the wizard to select the project root with the project's `package.json` and override the build step using `npm run build` and the output dir to be `./dist`
+Перейдите на https://vercel.com/import/git и импортируйте проект в Vercel, используя выбранный вами Git (GitHub, GitLab или BitBucket). Следуя указаниям, выберите корень проекта с помощью `package.json` и переопределите этап сборки, используя `npm run build`, а выходной каталог укажите `./dist`
 
-![Override Vercel Configuration](../images/vercel-configuration.png)
+![Переопределение конфигурации Vercel](../images/vercel-configuration.png)
 
-After your project has been imported, all subsequent pushes to branches will generate Preview Deployments, and all changes made to the Production Branch (commonly "main") will result in a Production Deployment.
+После того, как ваш проект будет импортирован, все последующие пуши в ветки будут генерировать предварительные публикации, а все изменения, внесенные в production ветвь (обычно "main"), приведут к production публикации.
 
-Once deployed, you will get a URL to see your app live, such as the following: https://vite.vercel.app
+После публикации вы получите URL-адрес для просмотра вашего приложения в реальном времени, например: https://vite.vercel.app
 
 ## Azure Static Web Apps
 
-You can quickly deploy your Vite app with Microsoft Azure [Static Web Apps](https://aka.ms/staticwebapps) service. You need:
+Вы можете быстро развернуть Vite приложение с помощью сервиса Microsoft Azure [Static Web Apps](https://aka.ms/staticwebapps). Для этого нужно:
 
-- An Azure account and a subscription key. You can create a [free Azure account here](https://azure.microsoft.com/free).
-- Your app code pushed to [GitHub](https://github.com).
-- The [SWA Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps) in [Visual Studio Code](https://code.visualstudio.com). 
+- Учетная запись Azure и ключ подписки. Вы можете создать [бесплатную учетную запись Azure здесь](https://azure.microsoft.com/free).
+- Код вашего приложения запушен на [GitHub](https://github.com).
+- [Расширение SWA](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps) в [Visual Studio Code](https://code.visualstudio.com). 
 
-Install the extension in VS Code and navigate to your app root. Open the Static Web Apps extension, sign in to Azure, and click the '+' sign to create a new Static Web App. You will be prompted to designate which subscription key to use. 
+Установите расширение в VS Code и перейдите в корень своего приложения. Откройте расширение Static Web Apps, войдите в Azure и кликните на знак «+», чтобы создать новое статическое веб-приложение. Вам будет предложено указать, какой ключ подписки использовать.
 
-Follow the wizard started by the extension to give your app a name, choose a framework preset, and designate the app root (usually `/`) and built file location `/dist`. The wizard will run and will create a GitHub action in your repo in a `.github` folder. 
+Следуйте указаниям, запущенного расширения, чтобы дать вашему приложению имя, выбрать пресет фреймворка, назначить корень приложения (обычно `/`) и указать расположение файлов `/dist`. Помощник запустится и создаст GitHub action в папке `.github` вашего репозитория.
 
-The action will work to deploy your app (watch its progress in your repo's Actions tab) and, when successfully completed, you can view your app in the address provided in the extension's progress window by clicking the 'Browse Website' button that appears when the GitHub action has run.   
+Action будет публиковать ваше приложения (наблюдайте за его прогрессом на вкладке Actions вашего репозитория), и после успешного завершения вы сможете просмотреть свое приложение по адресу, указанному в окне прогресса расширения, нажав кнопку «Browse Website», которая появляется, когда GitHub action был запущен.

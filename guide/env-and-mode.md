@@ -1,91 +1,90 @@
-# Env Variables and Modes
+# Env переменные и режимы
 
-## Env Variables
+## Env переменные
 
-Vite exposes env variables on the special **`import.meta.env`** object. Some built-in variables are available in all cases:
+Vite предоставляет env переменные в специальном объекте **`import.meta.env`**. Некоторые встроенные переменные доступны во всех случаях:
 
-- **`import.meta.env.MODE`**: {string} the [mode](#modes) the app is running in.
+- **`import.meta.env.MODE`**: {string} [режим](#modes), в котором работает приложение.
 
-- **`import.meta.env.BASE_URL`**: {string} the base url the app is being served from. This is determined by the [`base` config option](/config/#base).
+- **`import.meta.env.BASE_URL`**: {string} базовый URL-адрес, на котором работает приложение. Это определяется [параметром `base` конфигурации](/config/#base).
 
-- **`import.meta.env.PROD`**: {boolean} whether the app is running in production.
+- **`import.meta.env.PROD`**: {boolean} работает ли приложение в production среде.
 
-- **`import.meta.env.DEV`**: {boolean} whether the app is running in development (always the opposite of `import.meta.env.PROD`)
+- **`import.meta.env.DEV`**: {boolean} работает ли приложение в development среде (всегда противоположно `import.meta.env.PROD`)
 
-### Production Replacement
+### Production замена
 
-During production, these env variables are **statically replaced**. It is therefore necessary to always reference them using the full static string. For example, dynamic key access like `import.meta.env[key]` will not work.
+Во время production эти env переменные **статически заменяются**. Поэтому необходимо всегда ссылаться на них, используя полную статическую строку. Например, динамический доступ к ключу, как `import.meta.env[key]`, не будет работать.
 
-It will also replace these strings appearing in JavaScript strings and Vue templates. This should be a rare case, but it can be unintended. There are ways to work around this behavior:
+Замена также произойдет для этих переменных, появляющихся в JavaScript строках и Vue шаблонах. Это должно быть редким случаем, но он может быть и непреднамеренным. Есть способы обойти это поведение:
 
-- For JavaScript strings, you can break the string up with a unicode zero-width space, e.g. `'import.meta\u200b.env.MODE'`.
+- Для JavaScript строк вы можете разбить строку с помощью unicode zero-width пробела, например `'import.meta\u200b.env.MODE'`.
+- Для Vue шаблонов или другого HTML, который компилируется в JavaScript строки, вы можете использовать [тег `<wbr>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/wbr), например `import.meta.<wbr>env.MODE`.
 
-- For Vue templates or other HTML that gets compiled into JavaScript strings, you can use the [`<wbr>` tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/wbr), e.g. `import.meta.<wbr>env.MODE`.
+## `.env` файлы
 
-## `.env` Files
-
-Vite uses [dotenv](https://github.com/motdotla/dotenv) to load additional environment variables from the following files in your [environment directory](/config/#envDir):
+Vite использует [dotenv](https://github.com/motdotla/dotenv) для загрузки дополнительных переменных среды из следующих файлов в вашем [каталоге среды](/config/#envDir):
 
 ```
-.env                # loaded in all cases
-.env.local          # loaded in all cases, ignored by git
-.env.[mode]         # only loaded in specified mode
-.env.[mode].local   # only loaded in specified mode, ignored by git
+.env                # загрузится во всех случаях
+.env.local          # загрузится во всех случаях, игнорируется git'ом
+.env.[mode]         # загрузится только в указанном режиме
+.env.[mode].local   # загрузится только в указанном режиме, игнорируется git'ом
 ```
 
-Loaded env variables are also exposed to your client source code via `import.meta.env`.
+Загруженные env переменные также доступны в вашем клиентском исходном коде через `import.meta.env`.
 
-To prevent accidentally leaking env variables to the client, only variables prefixed with `VITE_` are exposed to your Vite-processed code. e.g. the following file:
+Чтобы предотвратить случайную утечку env переменных на клиент, Vite обработает только переменные с префиксом `VITE_`, например следующий файл:
 
 ```
 DB_PASSWORD=foobar
 VITE_SOME_KEY=123
 ```
 
-Only `VITE_SOME_KEY` will be exposed as `import.meta.env.VITE_SOME_KEY` to your client source code, but `DB_PASSWORD` will not.
+Только `VITE_SOME_KEY` будет отображаться как `import.meta.env.VITE_SOME_KEY` для клиентского исходного кода, а `DB_PASSWORD` - нет.
 
-:::warning SECURITY NOTES
+:::warning ЗАМЕТКИ ПО БЕЗОПАСНОСТИ
 
-- `.env.*.local` files are local-only and can contain sensitive variables. You should add `.local` to your `.gitignore` to avoid them being checked into git.
+- Файлы `.env.*.local` являются только локальными и могут содержать конфиденциальные переменные. Вы должны добавить `.local` в ваш `.gitignore`, чтобы избежать их регистрации в git.
 
-- Since any variables exposed to your Vite source code will end up in your client bundle, `VITE_*` variables should _not_ contain any sensitive information.
+- Поскольку любые переменные, представленные вашему исходному коду Vite, попадут в вашу клиентскую сборку, переменные `VITE_*` _не_ должны содержать какую-либо конфиденциальную информацию.
   :::
 
 ### IntelliSense
 
-By default, Vite provides type definition for `import.meta.env`. While you can define more custom env variables in `.env.[mode]` files, you may want to get TypeScript IntelliSense for user-defined env variables which prefixed with `VITE_`.
+По умолчанию Vite предоставляет определение типов для `import.meta.env`. Хотя вы можете определить кастомные env переменные в `.env.[mode]` файлах, вам может потребоваться TypeScript IntelliSense для user-defined env переменных с префиксом `VITE_`.
 
-To achieve, you can create an `env.d.ts` in `src` directory, then augment `ImportMetaEnv` like this:
+Для этого вы можете создать `env.d.ts` в каталоге `src`, а затем дополнить `ImportMetaEnv` следующим образом:
 
 ```typescript
 interface ImportMetaEnv {
   VITE_APP_TITLE: string
-  // more env variables...
+  // другие env переменные...
 }
 ```
 
-## Modes
+## Режимы
 
-By default, the dev server (`serve` command) runs in `development` mode, and the `build` command runs in `production` mode.
+По умолчанию сервер разработки (команда `serve`) запускается в `development` режиме, а команда `build` – в `production` режиме.
 
-This means when running `vite build`, it will load the env variables from `.env.production` if there is one:
+Это означает, что при запуске `vite build` он загрузит env переменные из `.env.production`, если они есть:
 
 ```
 # .env.production
 VITE_APP_TITLE=My App
 ```
 
-In your app, you can render the title using `import.meta.env.VITE_APP_TITLE`.
+В вашем приложении вы можете отрендерить заголовок с помощью `import.meta.env.VITE_APP_TITLE`.
 
-However, it is important to understand that **mode** is a wider concept than just development vs. production. A typical example is you may want to have a "staging" mode where it should have production-like behavior, but with slightly different env variables from production.
+Однако важно понимать, что **режим** - это более широкое понятие, чем просто development и production. Типичный пример: вам может потребоваться "staging" режим, в котором должно быть поведение, подобное production, но с немного отличающимися env переменными от production среды.
 
-You can overwrite the default mode used for a command by passing the `--mode` option flag. For example, if you want to build your app for our hypothetical staging mode:
+Вы можете перезаписать режим по умолчанию, используемый для команды, передав флаг опции `--mode`. Например, если вы хотите собрать свое приложение для нашего гипотетического staging режима:
 
 ```bash
 vite build --mode staging
 ```
 
-And to get the behavior we want, we need a `.env.staging` file:
+И чтобы получить желаемое поведение, нам нужен `.env.staging` файл:
 
 ```
 # .env.staging
@@ -93,4 +92,4 @@ NODE_ENV=production
 VITE_APP_TITLE=My App (staging)
 ```
 
-Now your staging app should have production-like behavior, but displaying a different title from production.
+Теперь ваше staging приложение должно иметь поведение, подобное production, но отображать заголовок, отличный от production.
