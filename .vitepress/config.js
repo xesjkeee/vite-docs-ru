@@ -82,7 +82,7 @@ module.exports = {
       // catch-all fallback
       '/': [
         {
-          text: 'Guide',
+          text: 'Руководство',
           children: [
             {
               text: 'Почему Vite',
@@ -139,10 +139,10 @@ module.exports = {
           ]
         },
         {
-          text: 'APIs',
+          text: 'API',
           children: [
             {
-              text: 'Plugin API',
+              text: 'API для плагинов',
               link: '/guide/api-plugin'
             },
             {
