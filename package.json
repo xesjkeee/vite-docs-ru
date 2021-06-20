@@ -2,13 +2,13 @@
 	"name": "vite-docs-ru",
 	"version": "1.0.0",
 	"description": "Vite.js documentation Russian translation.",
-	"repository": "https://github.com/vitejs/docs-ru",
+	"repository": "https://github.com/xesjkeee/vite-docs-ru",
 	"author": "Evan You",
 	"license": "MIT",
 	"private": true,
 	"devDependencies": {
 		"chalk": "^4.1.0",
-		"vitepress": "^0.12.2",
+		"vitepress": "^0.15.4",
 		"yorkie": "^2.0.0"
 	},
 	"scripts": {
