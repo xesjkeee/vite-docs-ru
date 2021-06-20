@@ -1,31 +1,32 @@
-# Configuring Vite
+# Конфигурация Vite
 
-## Config File
+## Файл конфигурации
 
-### Config File Resolving
+### Определение файла конфигурации
 
-When running `vite` from the command line, Vite will automatically try to resolve a config file named `vite.config.js` inside [project root](/guide/#index-html-and-project-root).
+При запуске `vite` из командной строки, Vite автоматически попытается определить файл конфигурации с названием `vite.config.js` в [корне проекта](/guide/#index-html-и-корень-проекта).
 
-The most basic config file looks like this:
+Самая базовая конфигурация выглядит следующи образом:
 
 ```js
 // vite.config.js
 export default {
-  // config options
+  // настройки конфигурации
 }
 ```
 
-Note Vite supports using ES modules syntax in the config file even if the project is not using native Node ESM via `type: "module"`. In this case the config file is auto pre-processed before load.
+Vite поддерживает синтаксис ES-модулей в файле конфигурации даже если проект не использует нативный Node ESM с `type: "module"`. В таком случае файл будет автоматически обработан перед загрузкой.
 
-You can also explicitly specify a config file to use with the `--config` CLI option (resolved relative to `cwd`):
+Вы также можете указать файл конфигурации с помощью опции CLI `--config` (определяется относительно `cwd`):
 
 ```bash
 vite --config my-config.js
 ```
 
-### Config Intellisense
+### Intellisense в файле конфигурации
 
-Since Vite ships with TypeScript typings, you can leverage your IDE's intellisense with jsdoc type hints:
+Т.к. Vite идет с типизацией TypeScript, вы можете использовать Intellisense вашей IDE с помощью подсказок jsdoc:
+
 
 ```js
 /**
@@ -38,7 +39,7 @@ const config = {
 export default config
 ```
 
-Alternatively you can use the `defineConfig` helper which should provide intellisense without the need for jsdoc annotations:
+Или вы можете использовать хелпер `defineConfig`, который предоставляет intellisense без необходимости использовать аннотации jsdoc:
 
 ```js
 import { defineConfig } from 'vite'
@@ -48,124 +49,124 @@ export default defineConfig({
 })
 ```
 
-Vite also directly supports TS config files. You can use `vite.config.ts` with the `defineConfig` helper as well.
+Vite также поддерживает файлы конфигурации с TypeScript. Вы можете использовать `vite.config.ts` вместе с хелпером `defineConfig`.
 
-### Conditional Config
+### Условная конфигурация
 
-If the config needs to conditional determine options based on the command (`serve` or `build`) or the [mode](/guide/env-and-mode) being used, it can export a function instead:
+Если конфигурация должна изменяться в зависимости от команды (`serve` или `build`) или [режима](/guide/env-and-mode), то можно экспортировать функцию:
 
 ```js
 export default ({ command, mode }) => {
   if (command === 'serve') {
     return {
-      // serve specific config
+      // конфигурация для serve
     }
   } else {
     return {
-      // build specific config
+      // конфигурация для build
     }
   }
 }
 ```
 
-### Async Config
+### Асинхронная конфигурация
 
-If the config needs to call async function, it can export a async function instead:
+Если для настройки нужно вызвать асинхронную функцию, то файл конфигурации может экспортировать асинхронную функцию:
 
 ```js
 export default async ({ command, mode }) => {
   const data = await asyncFunction()
   return {
-    // build specific config
+    // конфигурация
   }
 }
 ```
 
-## Shared Options
+## Общие настройки
 
 ### root
 
-- **Type:** `string`
-- **Default:** `process.cwd()`
+- **Тип:** `string`
+- **По-умолчанию:** `process.cwd()`
 
-  Project root directory (where `index.html` is located). Can be an absolute path, or a path relative from the location of the config file itself.
+  Директория корня проекта (там лежит `index.html`). Может быть абсолютным путем или относительным файлу конфигурации.
 
-  See [Project Root](/guide/#index-html-and-project-root) for more details.
+  См. [корень проекта](/guide/#index-html-и-корень-проекта) для большей информации.
 
 ### base
 
-- **Type:** `string`
-- **Default:** `/`
+- **Тип:** `string`
+- **По-умолчанию:** `/`
 
-  Base public path when served in development or production. Valid values include:
+  Публичный базовый путь, по которому отдается сайт в режиме разработки и после выкладки. Допустимые значения:
 
-  - Absolute URL pathname, e.g. `/foo/`
-  - Full URL, e.g. `https://foo.com/`
-  - Empty string or `./` (for embedded deployment)
+  - Абсолютный URL, например, `/foo/`
+  - Полный URL, например, `https://foo.com/`
+  - Пустая строка или `./` (при встроенном развертывании)
 
-  See [Public Base Path](/guide/build#public-base-path) for more details.
+  См. [публичный базовый путь](/guide/build#пубnичный-базовый-путь) для большей информации.
 
 ### mode
 
-- **Type:** `string`
-- **Default:** `'development'` for serve, `'production'` for build
+- **Тип:** `string`
+- **По-умолчанию:** `'development'` для serve, `'production'` для build
 
-  Specifying this in config will override the default mode for **both serve and build**. This value can also be overridden via the command line `--mode` option.
+  Это свойство перезаписывает режим для обеих команд: `serve` и `build`! Это значение также можно перезаписать с помощью опции командной строки `--mode`.
 
-  See [Env Variables and Modes](/guide/env-and-mode) for more details.
+  См. [Переменные окружения и режимы](/guide/env-and-mode) для большей информации.
 
 ### define
 
-- **Type:** `Record<string, string>`
+- **Тип:** `Record<string, string>`
 
-  Define global constant replacements. Entries will be defined as globals during dev and statically replaced during build.
+  Задает замены глобальных констант. Определяемые здесь значения будут заданы как глобальные во время разработки, но будут статически заменены во время сборки.
 
-  - Starting from `2.0.0-beta.70`, string values will be used as raw expressions, so if defining a string constant, it needs to be explicitly quoted (e.g. with `JSON.stringify`).
+  - Начиная с `2.0.0-beta.70`, строковые значения определяются как  выражения JavaScript, поэтому при определении строковой константы её нужно явно обернуть в кавычки (например, с помощью `JSON.stringify`).
 
-  - Replacements are performed only when the match is surrounded by word boundaries (`\b`).
+  - Замена производится только если подходящее значение обёрнуто в границы слова (`\b`).
 
-  Because it's implemented as straightforward text replacements without any syntax analyzation, we recommend using `define` for CONSTANTS only.
+  Из-за того, что этот функционал реализован как прямая замена текста без какого-либо синтаксического анализа, мы рекомендуем использовать `define` только для КОНСТАНТ.
 
-  For example, `process.env.FOO` and `__APP_VERSION__` are good fits. But `process` or `global` should not be put into this option. Variables can be shimmed or polyfilled instead.
+  Например, хорошими кандидатами будут `process.env.FOO` и `__APP_VERSION__`. Но `process` или `global` лучше не вставлять в эту настройку. Вместо этого лучше использовать полифил или shim.
 
 ### plugins
 
-- **Type:** ` (Plugin | Plugin[])[]`
+- **Тип:** ` (Plugin | Plugin[])[]`
 
-  Array of plugins to use. Falsy plugins are ignored and arrays of plugins are flattened. See [Plugin API](/guide/api-plugin) for more details on Vite plugins.
+  Массив плагинов для использования внутри приложения. Плагины, которые возвращают `falsy`-значения, игнорируются. Массив плагинов сглаживается в единый массив. См. [API для плагинов](/guide/api-plugin) для более подробной информации по плагинам Vite.
 
 ### publicDir
 
-- **Type:** `string`
-- **Default:** `"public"`
+- **Тип:** `string`
+- **По-умолчанию:** `"public"`
 
-  Directory to serve as plain static assets. Files in this directory are served at `/` during dev and copied to the root of `outDir` during build, and are always served or copied as-is without transform. The value can be either an absolute file system path or a path relative to project root.
+  Директория, которая отдает статические ресурсы. Файлы из этой директории отдаются по пути `/` во время разработки и копируются в корень `outDir` во время сборки, но абсолютно всегда отдаются такими, какие есть, - без каких-либо трансформаций. Значение может быть или абсолютным путем файловой системы, или относительным корню проекта.
 
-  See [The `public` Directory](/guide/assets#the-public-directory) for more details.
+  См. [директорию `public`](/guide/assets#директория-public) для более подробной информации.
 
 ### cacheDir
 
-- **Type:** `string`
-- **Default:** `"node_modules/.vite"`
+- **Тип:** `string`
+- **По-умолчанию:** `"node_modules/.vite"`
 
-  Directory to save cache files. Files in this directory are pre-bundled deps or some other cache files that generated by vite, which can improve the performance. You can use `--force` flag or manually delete the directory to regenerate the cache files. The value can be either an absolute file system path or a path relative to project root.
+  Директория, в которую сохраняются кешированные файлы. В этой директории хранятся пре-собранные зависимости и другие кешированные файлы, сгенерированные Vite, которые улучшают производительность. Вы можете использовать флаг `--force` или вручную удалить директорию, чтобы пересоздать закешированные файлы. Значение может быть или абсолютным путем файловой системы, или относительным корню проекта.
 
 ### resolve.alias
 
-- **Type:**
+- **Тип:**
   `Record<string, string> | Array<{ find: string | RegExp, replacement: string }>`
 
-  Will be passed to `@rollup/plugin-alias` as its [entries option](https://github.com/rollup/plugins/tree/master/packages/alias#entries). Can either be an object, or an array of `{ find, replacement }` pairs.
+  Будет передано в плагин `@rollup/plugin-alias` как [опция "entries"](https://github.com/rollup/plugins/tree/master/packages/alias#entries). Может быть либо объектом, либо массивом в формате `{ find, replacement }`.
 
-  When aliasing to file system paths, always use absolute paths. Relative alias values will be used as-is and will not be resolved into file system paths.
+  Создавая алиас, всегда используйте абсолютные пути. Относительные алиасы будут использованы "как есть" и не будут преобразованы в пути файловой системы.
 
-  More advanced custom resolution can be achieved through [plugins](/guide/api-plugin).
+  Более продвинутые замены путей можно достичь с помощью [плагинов](/guide/api-plugin).
 
 ### resolve.dedupe
 
-- **Type:** `string[]`
+- **Тип:** `string[]`
 
-  If you have duplicated copies of the same dependency in your app (likely due to hoisting or linked packages in monorepos), use this option to force Vite to always resolve listed dependencies to the same copy (from project root).
+  Если в вашем приложении есть несколько копий одной и той же зависимости (скорее всего, из-за поднятия или связанных пакетов в монорепозитории), используйте эту опцию, чтобы Vite всегда определял перечисленные зависимости к одной копии (из корня проекта).
 
 ### resolve.conditions
 
