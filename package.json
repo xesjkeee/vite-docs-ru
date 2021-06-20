@@ -1,8 +1,8 @@
 {
-	"name": "vite-docs-cn",
+	"name": "vite-docs-ru",
 	"version": "1.0.0",
-	"description": "Vite.js documentation Chinese translation.",
-	"repository": "https://github.com/vitejs/docs-cn",
+	"description": "Vite.js documentation Russian translation.",
+	"repository": "https://github.com/vitejs/docs-ru",
 	"author": "Evan You",
 	"license": "MIT",
 	"private": true,
