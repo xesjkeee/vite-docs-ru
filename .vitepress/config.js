@@ -142,7 +142,7 @@ module.exports = {
           text: 'API',
           children: [
             {
-              text: 'API для плагинов',
+              text: 'API плагинов',
               link: '/guide/api-plugin'
             },
             {
