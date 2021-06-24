@@ -1,12 +1,12 @@
-# API для плагинов
+# API плагинов
 
 Плагины Vite расширяют хорошо проработанный интерфейс плагинов Rollup, добавляя туда пару своих опций. В результаты вы можете написать плагин Vite, который будет работать как во время разработки, так и во время сборки.
 
 **Мы рекомендуем сначала пройтись по [документации плагинов Rollup](https://rollupjs.org/guide/en/#plugin-development), прежде чем читать разделы ниже.**
 
-## Конвенции
+## Соглашения
 
-Если плагин не использует хуки Vite и его можно реализовать как [совместимый плагин Rollup](#rollup-plugin-compatibility), то рекомендуется использовать [конвенцию именования плагинов Rollup](https://rollupjs.org/guide/en/#conventions).
+Если плагин не использует хуки Vite и его можно реализовать как [совместимый плагин Rollup](#rollup-plugin-compatibility), то рекомендуется использовать [соглашение именования плагинов Rollup](https://rollupjs.org/guide/en/#conventions).
 
 - Плагины Rollup должны иметь четкое название с префиксом `rollup-plugin-`.
 - В package.json должны быть ключевые слова `rollup-plugin` и `vite-plugin`.
@@ -27,7 +27,7 @@
 
 ## Настройки плагинов
 
-Пользователи будут добавлять плагин в `devDependencies` своего проекта и настраивать их с помощью опции `plugins`.
+Пользователи будут добавлять плагины в `devDependencies` своего проекта и настраивать их с помощью параметра `plugins`.
 
 ```js
 // vite.config.js
@@ -65,7 +65,7 @@ export default {
 ## Простые примеры
 
 :::tip ПРИМЕЧАНИЕ
-Существует конвенция выкладывать плагины Vite/Rollup в виде функции, которая возвращает объект плагина. Такая функция может получать настройки, которые позволяют пользователю управлять поведением плагина.
+Обычно плагин Vite/Rollup создается как фабричная функция, которая возвращает фактический объект плагина. Функция может принимать параметры, позволяющие пользователям настраивать поведение плагина.
 :::
 
 ### Импортирование виртуального файла
@@ -75,7 +75,7 @@ export default function myPlugin() {
   const virtualFileId = '@my-virtual-file'
 
   return {
-    name: 'my-plugin', // обязательное поле, будет показываться в ошиках
+    name: 'my-plugin', // обязательное поле, будет показываться в ошибках
     resolveId(id) {
       if (id === virtualFileId) {
         return virtualFileId
@@ -111,7 +111,7 @@ export default function myPlugin() {
       if (fileRegex.test(id)) {
         return {
           code: compileFileToJS(src),
-          map: null // если возможно, стоит предоставить source map
+          map: null // по возможности предоставлять source map
         }
       }
     }
@@ -128,7 +128,7 @@ export default function myPlugin() {
 - [`options`](https://rollupjs.org/guide/en/#options)
 - [`buildStart`](https://rollupjs.org/guide/en/#buildstart)
 
-Следующие хуки вызываются для каждого нового скачанного модуля:
+Следующие хуки вызываются для каждого нового запрошенного модуля:
 
 - [`resolveId`](https://rollupjs.org/guide/en/#resolveid)
 - [`load`](https://rollupjs.org/guide/en/#load)
@@ -141,7 +141,7 @@ export default function myPlugin() {
 
 Стоит заметить, что хук [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed) **не вызывается** во время разработки, потому что Vite старается не парсить полное AST ради улучшенной производительности.
 
-[Хуки генерации вывода](https://rollupjs.org/guide/en/#output-generation-hooks) (за исключение `closeBundle`) **не вызываются** во время разработки. Можно сделать аналогию, будто сервер Vite вызывает только `rollup.rollup()`, без вызова `bundle.generate()`.
+[Хуки генерации вывода](https://rollupjs.org/guide/en/#output-generation-hooks) (за исключением `closeBundle`) **не вызываются** во время разработки. Можно сделать аналогию, будто сервер Vite вызывает только `rollup.rollup()`, без вызова `bundle.generate()`.
 
 ## Vite Specific Hooks
 
@@ -388,9 +388,9 @@ Vite plugins can also provide hooks that serve Vite-specific purposes. These hoo
     }
     ```
 
-## Порядок плагина
+## Порядок вызова плагина
 
-Плагин Vite может дополнительно указать свойство `enforce` (как в webpack loaders) для настройки порядка вызова. Значение `enforce` может быть или `"pre"`, или `"post"`. Плагины будут вызываться в следующем порядке:
+Плагин Vite может дополнительно указать свойство `enforce` (как в webpack loaders) для настройки порядка вызова. Значение `enforce` может быть `"pre"` или `"post"`. Плагины будут вызываться в следующем порядке:
 
 - Alias
 - Пользовательские плагины с `enforce: 'pre'`
@@ -402,7 +402,7 @@ Vite plugins can also provide hooks that serve Vite-specific purposes. These hoo
 
 ## Применение в определенных условиях
 
-По-умолчанию, плагины запускаются и на `serve`, и на `build`. Но если плагин должен примениться только на одной из стадий, используйте свойство `apply`, чтобы ограничить вызов во время `'build'` или `'serve'`:
+По-умолчанию, плагины запускаются на `serve` и на `build`. Но если плагин должен примениться только на одной из стадий, используйте свойство `apply`, чтобы ограничить вызов во время `'build'` или `'serve'`:
 
 ```js
 function myPlugin() {
@@ -415,14 +415,14 @@ function myPlugin() {
 
 ## Совместимость плагинов Rollup
 
-Большинство плагинов Rollup будут работать как плагины Vite (например, `@rollup/plugin-alias` или `@rollup/plugin-json`), но не все, т.к. хуки некоторых плагинов не имеют смысла в контексте несобираемого сервера разработки.
+Большинство плагинов Rollup будут работать как плагины Vite (например, `@rollup/plugin-alias` или `@rollup/plugin-json`), но не все, т.к. хуки некоторых плагинов не имеют смысла в контексте несобранного сервера разработки.
 
 В целом, пока плагин Rollup соответствует следующим критериям, он должен работать как плагин Vite:
 
 - Он не использует хук [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed).
 - Он не имеет сильной связи между хуками фаз сборки и вывода.
 
-Если плагин Rollup имеет смысл только на фазе сорки, то его лучше указать через `build.rollupOptions.plugins`.
+Если плагин Rollup имеет смысл только на фазе сборки, то его лучше указать через `build.rollupOptions.plugins`.
 
 Вы также можете расширить существующий плагин Rollup свойствами плагина Vite:
 

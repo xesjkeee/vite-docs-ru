@@ -1,7 +1,7 @@
 # Плагины
 
 :::tip ПРИМЕЧАНИЕ
-Vite старается обеспечить поддержку стандартных паттернов проектирования из коробки. Прежде чем искать плагин для Vite или Rollup, проверьте [раздел возможностей](../guide/features.md). Большинство случаев, когда вам бы пригодился плагин в проекте Rollup, уже покрыты внутри Vite.
+Vite старается обеспечить поддержку стандартных паттернов проектирования из коробки. Прежде чем искать плагин для Vite или Rollup, проверьте [раздел возможностей](../guide/features.md). Большинство случаев, когда вам бы пригодился плагин в проекте Rollup, уже есть внутри Vite.
 :::
 
 ## Официальные плагины
@@ -12,7 +12,7 @@ Vite старается обеспечить поддержку стандарт
 
 ### [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite/tree/main/packages/plugin-vue-jsx)
 
-- Обеспечивает поддержку JSX для Vue 3 (с помощью [преобразователя Babel](https://github.com/vuejs/jsx-next)).
+- Обеспечивает поддержку JSX для Vue 3 (с помощью [преобразований Babel](https://github.com/vuejs/jsx-next)).
 
 ### [@vitejs/plugin-react-refresh](https://github.com/vitejs/vite/tree/main/packages/plugin-react-refresh)
 
