@@ -68,7 +68,7 @@ import InlineWorker from './shader.js?worker&inline'
 
 Посмотрите [раздел Web Worker](./features.md#web-workers) для получения более подробной информации.
 
-## `public` директория
+## Директория `public`
 
 Если у вас есть ресурсы, которые:
 
