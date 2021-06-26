@@ -1,31 +1,31 @@
 # Плагины
 
-:::tip NOTE
-Vite aims to provide out-of-the-box support for common web development patterns. Before searching for a Vite or Compatible Rollup plugin, check out the [Features Guide](../guide/features.md). A lot of the cases where a plugin would be needed in a Rollup project are already covered in Vite.
+:::tip ПРИМЕЧАНИЕ
+Vite старается обеспечить поддержку стандартных паттернов проектирования из коробки. Прежде чем искать плагин для Vite или Rollup, проверьте [раздел возможностей](../guide/features.md). Большинство случаев, когда вам бы пригодился плагин в проекте Rollup, уже есть внутри Vite.
 :::
 
 ## Официальные плагины
 
 ### [@vitejs/plugin-vue](https://github.com/vitejs/vite/tree/main/packages/plugin-vue)
 
-- Provides Vue 3 Single File Components support.
+- Обеспечивает поддержку однофайловых компонентов Vue 3.
 
 ### [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite/tree/main/packages/plugin-vue-jsx)
 
-- Provides Vue 3 JSX support (via [dedicated Babel transform](https://github.com/vuejs/jsx-next)).
+- Обеспечивает поддержку JSX для Vue 3 (с помощью [преобразований Babel](https://github.com/vuejs/jsx-next)).
 
 ### [@vitejs/plugin-react-refresh](https://github.com/vitejs/vite/tree/main/packages/plugin-react-refresh)
 
-- Provides React Fast Refresh Support.
+- Обеспечивает поддержку быстрого обновления для React.
 
 ### [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)
 
-- Provides legacy browsers support for the production build.
+- Обеспечивает поддержку устаревших браузеров для production-сборки.
 
 ## Плагины сообщества
 
-Check out [awesome-vite](https://github.com/vitejs/awesome-vite#plugins) - you can also submit a PR to list your plugins there.
+Загляните в [awesome-vite](https://github.com/vitejs/awesome-vite#plugins) - вы также можете сделать PR, чтобы ваш плагин попал в список.
 
-## Rollup плагины
+## Плагины Rollup
 
-[Vite plugins](../guide/api-plugin) are an extension of Rollup's plugin interface. Check out the [Rollup Plugin Compatibility section](../guide/api-plugin#rollup-plugin-compatibility) for more information.
+[Плагины Vite](../guide/api-plugin) являются надстройкой над интерфейсом плагинов Rollup. Для большей информации посмотрите [раздел совместимости с плагинами Rollup](../guide/api-plugin#совместимость-пnагинов-rollup).

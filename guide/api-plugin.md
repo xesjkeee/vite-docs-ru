@@ -1,33 +1,33 @@
-# Plugin API
+# API плагинов
 
-Vite plugins extends Rollup's well-designed plugin interface with a few extra Vite-specific options. As a result, you can write a Vite plugin once and have it work for both dev and build.
+Плагины Vite расширяют хорошо проработанный интерфейс плагинов Rollup, добавляя туда пару своих опций. В результаты вы можете написать плагин Vite, который будет работать как во время разработки, так и во время сборки.
 
-**It is recommended to go through [Rollup's plugin documentation](https://rollupjs.org/guide/en/#plugin-development) first before reading the sections below.**
+**Мы рекомендуем сначала пройтись по [документации плагинов Rollup](https://rollupjs.org/guide/en/#plugin-development), прежде чем читать разделы ниже.**
 
-## Conventions
+## Соглашения
 
-If the plugin doesn't use Vite specific hooks and can be implemented as a [Compatible Rollup Plugin](#rollup-plugin-compatibility), then it is recommended to use the [Rollup Plugin naming conventions](https://rollupjs.org/guide/en/#conventions)
+Если плагин не использует хуки Vite и его можно реализовать как [совместимый плагин Rollup](#rollup-plugin-compatibility), то рекомендуется использовать [соглашение именования плагинов Rollup](https://rollupjs.org/guide/en/#conventions).
 
-- Rollup Plugins should have a clear name with `rollup-plugin-` prefix.
-- Include `rollup-plugin` and `vite-plugin` keywords in package.json.
+- Плагины Rollup должны иметь четкое название с префиксом `rollup-plugin-`.
+- В package.json должны быть ключевые слова `rollup-plugin` и `vite-plugin`.
 
-This exposes the plugin to be also used in pure Rollup or WMR based projects
+Благодаря этому плагин можно использовать в проектах, которые используют только Rollup или WMR
 
-For Vite only plugins
+Для плагинов Vite
 
-- Vite Plugins should have a clear name with `vite-plugin-` prefix.
-- Include `vite-plugin` keyword in package.json.
-- Include a section in the plugin docs detailing why it is a Vite only plugin (for example, it uses Vite specific plugin hooks).
+- Плагины Vite должны иметь четкое название с префиксом `vite-plugin-`.
+- В package.json должно быть ключевое слово `vite-plugin`.
+- В документации плагина должен быть раздел, описывающий, почему данный плагин можно использовать только с Vite (например, он использует специфичные для Vite хуки)
 
-If your plugin is only going to work for a particular framework, its name should be included as part of the prefix
+Если ваш плагин будет работать только с каким-то фреймворков, то название фреймворка должно быть частью префикса
 
-- `vite-plugin-vue-` prefix for Vue Plugins
-- `vite-plugin-react-` prefix for React Plugins
-- `vite-plugin-svelte-` prefix for Svelte Plugins
+- префикс `vite-plugin-vue-` для плагинов Vue
+- префикс `vite-plugin-react-` для плагинов React
+- префикс `vite-plugin-svelte-` для плагинов Svelte
 
-## Plugins config
+## Настройки плагинов
 
-Users will add plugins to the project `devDependencies` and configure them using the `plugins` array option.
+Пользователи будут добавлять плагины в `devDependencies` своего проекта и настраивать их с помощью параметра `plugins`.
 
 ```js
 // vite.config.js
@@ -39,9 +39,9 @@ export default {
 }
 ```
 
-Falsy plugins will be ignored, which can be used to easily activate or deactivate plugins.
+Плагины, возвращающие `falsy`-значения, будут проигнорированы. Так можно легко активировать или деактировать плагины.
 
-`plugins` also accept presets including several plugins as a single element. This is useful for complex features (like framework integration) that are implemented using several plugins. The array will be flattened internally.
+`plugins` также могут включать несколько плагинов в качестве одного элемента. Это удобно для реализации какого-нибудь сложного функционала с использованием несколько плагинов (например, интеграция с фреймворком). Vite автоматически сделает его плоским.
 
 ```js
 // framework-plugin
@@ -62,20 +62,20 @@ export default {
 }
 ```
 
-## Simple Examples
+## Простые примеры
 
-:::tip
-It is common convention to author a Vite/Rollup plugin as a factory function that returns the actual plugin object. The function can accept options which allows users to customize the behavior of the plugin.
+:::tip ПРИМЕЧАНИЕ
+Обычно плагин Vite/Rollup создается как фабричная функция, которая возвращает фактический объект плагина. Функция может принимать параметры, позволяющие пользователям настраивать поведение плагина.
 :::
 
-### Importing a Virtual File
+### Импортирование виртуального файла
 
 ```js
 export default function myPlugin() {
   const virtualFileId = '@my-virtual-file'
 
   return {
-    name: 'my-plugin', // required, will show up in warnings and errors
+    name: 'my-plugin', // обязательное поле, будет показываться в ошибках
     resolveId(id) {
       if (id === virtualFileId) {
         return virtualFileId
@@ -83,14 +83,14 @@ export default function myPlugin() {
     },
     load(id) {
       if (id === virtualFileId) {
-        return `export const msg = "from virtual file"`
+        return `export const msg = "из виртуального файла"`
       }
     }
   }
 }
 ```
 
-Which allows importing the file in JavaScript:
+Этот плагин позволяет импортировать файл в JavaScript:
 
 ```js
 import { msg } from '@my-virtual-file'
@@ -98,7 +98,7 @@ import { msg } from '@my-virtual-file'
 console.log(msg)
 ```
 
-### Transforming Custom File Types
+### Преобразование нестандартных типов файла
 
 ```js
 const fileRegex = /\.(my-file-ext)$/
@@ -111,7 +111,7 @@ export default function myPlugin() {
       if (fileRegex.test(id)) {
         return {
           code: compileFileToJS(src),
-          map: null // provide source map if available
+          map: null // по возможности предоставлять source map
         }
       }
     }
@@ -119,29 +119,29 @@ export default function myPlugin() {
 }
 ```
 
-## Universal Hooks
+## Универсальные хуки
 
-During dev, the Vite dev server creates a plugin container that invokes [Rollup Build Hooks](https://rollupjs.org/guide/en/#build-hooks) the same way Rollup does it.
+Во время разработки сервер Vite создает контейнер плагина, который вызывает [хуки сборки Rollup](https://rollupjs.org/guide/en/#build-hooks) по той же логике, как это делает сам Rollup:
 
-The following hooks are called once on server start:
+Следующие хуки вызываются один раз, когда сервер стартует:
 
 - [`options`](https://rollupjs.org/guide/en/#options)
 - [`buildStart`](https://rollupjs.org/guide/en/#buildstart)
 
-The following hooks are called on each incoming module request:
+Следующие хуки вызываются для каждого нового запрошенного модуля:
 
 - [`resolveId`](https://rollupjs.org/guide/en/#resolveid)
 - [`load`](https://rollupjs.org/guide/en/#load)
 - [`transform`](https://rollupjs.org/guide/en/#transform)
 
-The following hooks are called when the server is closed:
+Следующие хуки вызываются, когда сервер отключается:
 
 - [`buildEnd`](https://rollupjs.org/guide/en/#buildend)
 - [`closeBundle`](https://rollupjs.org/guide/en/#closebundle)
 
-Note that the [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed) hook is **not** called during dev, because Vite avoids full AST parses for better performance.
+Стоит заметить, что хук [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed) **не вызывается** во время разработки, потому что Vite старается не парсить полное AST ради улучшенной производительности.
 
-[Output Generation Hooks](https://rollupjs.org/guide/en/#output-generation-hooks) (except `closeBundle`) are **not** called during dev. You can think of Vite's dev server as only calling `rollup.rollup()` without calling `bundle.generate()`.
+[Хуки генерации вывода](https://rollupjs.org/guide/en/#output-generation-hooks) (за исключением `closeBundle`) **не вызываются** во время разработки. Можно сделать аналогию, будто сервер Vite вызывает только `rollup.rollup()`, без вызова `bundle.generate()`.
 
 ## Vite Specific Hooks
 
@@ -388,43 +388,43 @@ Vite plugins can also provide hooks that serve Vite-specific purposes. These hoo
     }
     ```
 
-## Plugin Ordering
+## Порядок вызова плагина
 
-A Vite plugin can additionally specify an `enforce` property (similar to webpack loaders) to adjust its application order. The value of `enforce` can be either `"pre"` or `"post"`. The resolved plugins will be in the following order:
+Плагин Vite может дополнительно указать свойство `enforce` (как в webpack loaders) для настройки порядка вызова. Значение `enforce` может быть `"pre"` или `"post"`. Плагины будут вызываться в следующем порядке:
 
 - Alias
-- User plugins with `enforce: 'pre'`
-- Vite core plugins
-- User plugins without enforce value
-- Vite build plugins
-- User plugins with `enforce: 'post'`
-- Vite post build plugins (minify, manifest, reporting)
+- Пользовательские плагины с `enforce: 'pre'`
+- Внутренние плагины Vite
+- Пользовательские плагины без значения `enforce`
+- Плагины сборки Vite
+- Пользовательские плагины с `enforce: 'post'`
+- Плагины Vite, выполняемые после сборки (minify, manifest, reporting)
 
-## Conditional Application
+## Применение в определенных условиях
 
-By default plugins are invoked for both serve and build. In cases where a plugin needs to be conditionally applied only during serve or build, use the `apply` property to only invoke them during `'build'` or `'serve'`:
+По-умолчанию, плагины запускаются на `serve` и на `build`. Но если плагин должен примениться только на одной из стадий, используйте свойство `apply`, чтобы ограничить вызов во время `'build'` или `'serve'`:
 
 ```js
 function myPlugin() {
   return {
     name: 'build-only',
-    apply: 'build' // or 'serve'
+    apply: 'build' // или 'serve'
   }
 }
 ```
 
-## Совместимость Rollup плагинов
+## Совместимость плагинов Rollup
 
-A fair number of Rollup plugins will work directly as a Vite plugin (e.g. `@rollup/plugin-alias` or `@rollup/plugin-json`), but not all of them, since some plugin hooks do not make sense in an unbundled dev server context.
+Большинство плагинов Rollup будут работать как плагины Vite (например, `@rollup/plugin-alias` или `@rollup/plugin-json`), но не все, т.к. хуки некоторых плагинов не имеют смысла в контексте несобранного сервера разработки.
 
-In general, as long as a Rollup plugin fits the following criterias then it should just work as a Vite plugin:
+В целом, пока плагин Rollup соответствует следующим критериям, он должен работать как плагин Vite:
 
-- It doesn't use the [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed) hook.
-- It doesn't have strong coupling between bundle-phase hooks and output-phase hooks.
+- Он не использует хук [`moduleParsed`](https://rollupjs.org/guide/en/#moduleparsed).
+- Он не имеет сильной связи между хуками фаз сборки и вывода.
 
-If a Rollup plugin only makes sense for the build phase, then it can be specified under `build.rollupOptions.plugins` instead.
+Если плагин Rollup имеет смысл только на фазе сборки, то его лучше указать через `build.rollupOptions.plugins`.
 
-You can also augment an existing Rollup plugin with Vite-only properties:
+Вы также можете расширить существующий плагин Rollup свойствами плагина Vite:
 
 ```js
 // vite.config.js
@@ -441,7 +441,7 @@ export default {
 }
 ```
 
-Check out [Vite Rollup Plugins](https://vite-rollup-plugins.patak.dev) for a list of compatible official Rollup plugins with usage instructions.
+Посмотрите список поддерживаемых официальных плагинов Rollup с инструкциями, как их использовать, на [Vite Rollup Plugins](https://vite-rollup-plugins.patak.dev).
 
 ## Path normalization
 
